@@ -98,5 +98,18 @@ print("See commented example above. Also creatable in the UI: AI Gateway -> Crea
 
 # COMMAND ----------
 
+# MAGIC %md ## Federation per user group
+# MAGIC Grant different MCP services to different groups, and (for desktop/coding agents) publish a central
+# MAGIC **Agent Configuration** naming the allowed MCP servers. Each group gets its own governed tool set —
+# MAGIC "MCP federation per user group" — with every tool call attributed to the caller in the usage table.
+# MAGIC ```sql
+# MAGIC GRANT EXECUTE ON MCP SERVICE sv_unity_gw.ai_services.demo_mcp    TO `platform-eng`;
+# MAGIC GRANT EXECUTE ON MCP SERVICE system.ai.github                    TO `developers`;
+# MAGIC -- a group only sees the tools on the services it can EXECUTE
+# MAGIC ```
+
+# COMMAND ----------
+
 # MAGIC %md
-# MAGIC ✅ Same governance model for tools as for models. Next: **`07_coding_agents`**.
+# MAGIC ✅ Same governance model for tools as for models. Next: **`07_coding_agents`** /
+# MAGIC **`08_claude_cowork_and_desktop`**.

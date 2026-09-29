@@ -53,16 +53,33 @@ Unity Catalog. Say that once up front, then prove it three times.
 
 ---
 
-## Act 3 — Coding agents  · notebook `07` (laptop) + `05`
-**Show:** developers' own coding tools, governed, with per-developer cost.
+## Act 1b (optional) — reliability + budgets  · notebook `09`
+Show one endpoint doing **traffic split 70/30 + automatic fallback** and a **token budget** that blocks
+overspend — reinforcing CHOICE + COST without any client change.
 
-1. On your laptop: `ug configure --workspace <this workspace>` then `ug configure --agents codex`
-   (or claude-code / cursor). Launch the agent; show the **"Databricks AI Gateway"** indicator.
-2. Ask the agent something; then in **`07` / `05`** run the per-developer usage query — the agent's
-   calls show up under **your identity**. *"Same governance, now for the IDE."*
-3. Mention the central **Agent Configuration** JSON (admin publishes allowed models + MCP servers once).
+## Act 3 — Coding & desktop agents  · notebooks `07` (laptop), `08`, then `05`
+**Show:** developers' own tools, governed, with per-developer cost — two on-ramps.
 
-**Proof point landed:** governed-by-default coding agents + per-developer cost.
+1. **CLI agents (`07`)** — on your laptop: `ug configure --workspace <this workspace>` then
+   `ug configure --agents codex` (or claude-code / cursor / copilot / gemini). Launch the agent; show the
+   **"Databricks AI Gateway"** indicator.
+2. **Desktop agents (`08`)** — Claude Cowork / Desktop **Developer Mode**: static API key (bearer PAT),
+   gateway base URL `…/ai-gateway/anthropic`, model ID `system.ai.claude-sonnet-5`, Test connection.
+   Run the notebook's model-discovery + messages cells to prove the route live.
+   - **Set the project-sharing expectation:** gateway mode keeps memory/context **private per user**; the
+     provider's account-level shared projects don't carry over. It changes *where inference goes*, not
+     where projects live.
+   - **For shared agent sessions**, mention **Omnigent** (exploratory, open-source; sandboxed cloud
+     sessions, shareable read-only URL) — position as dev/experimentation, not a production drop-in.
+3. In **`05`** run the per-developer usage query — agent calls show under **each developer's identity**.
+   Mention the central **Agent Configuration** (allowed models + MCP servers) → **MCP federation per user group**.
+
+**Proof point landed:** governed-by-default coding + desktop agents, per-developer cost, federated tools.
+
+## Also available (mention or show as time allows)
+- **External providers (`10`)** — OpenAI / Anthropic / Bedrock / Foundry / Gemini governed the same way
+  (provider services). CHOICE pillar, provider-agnostic.
+- **Inference logging** — enable per-service to capture full request/response payloads to a Delta table.
 
 ---
 

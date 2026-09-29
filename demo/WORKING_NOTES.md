@@ -59,9 +59,25 @@ gpt-oss-120b, gpt-oss-20b, llama-4-maverick, qwen3-next-80b, gemma-3-12b, meta-l
 - 429 body: `{"error_code":"REQUEST_LIMIT_EXCEEDED","message":"User defined rate limit(s) exceeded ... Requests-per-minute (RPM) ..."}`
 - Clear with `{"config":{"rate_limits":[]}}` (becomes null).
 
+## Claude Cowork / Desktop route (VERIFIED)
+- Developer Mode "gateway base URL" = `{HOST}/ai-gateway/anthropic` (Anthropic API shape), bearer PAT.
+- Model discovery: `GET /ai-gateway/anthropic/v1/models` -> lists `system.ai.claude-*` model IDs.
+- Invoke: `POST /ai-gateway/anthropic/v1/messages` with `{"model":"<model-service or system.ai.claude-*>","max_tokens":N,"messages":[...]}` -> 200 (anthropic response shape).
+- Model ID accepts a model-service FQN (e.g. `sv_unity_gw.ai_services.demo_llm`) OR `system.ai.claude-sonnet-5`.
+
+## Traffic split + fallback (VERIFIED)
+- Service `sv_unity_gw.ai_services.demo_llm_ha` = 70% sonnet-4-6 / 30% haiku-4-5 + Haiku fallback.
+- Schema: `config.routing.destinations[]` with `traffic_percentage`; `config.routing.fallback.destinations[]` (no percentage). GA.
+
+## Budgets / token limits (VERIFIED)
+- rate_limit item supports BOTH `requests` (RPM) and `tokens` (token budget per renewal_period). Others (tpm_limit, tokens_per_minute) rejected.
+
 ## TODO / to verify next
 - [x] Governed call -> 200
 - [x] Rate limit -> 429
+- [x] Cowork /ai-gateway/anthropic route
+- [x] Traffic split + fallback (demo_llm_ha)
+- [x] Token budget field (`tokens`)
 - [ ] Confirm calls show in system.ai_gateway.usage (wait for lag ~5-30m)
 - [ ] Service policy / guardrail attach (Beta) -> policy block
 - [ ] Access control -> 403 (needs a 2nd principal w/o EXECUTE; can't revoke own owner access cleanly)
